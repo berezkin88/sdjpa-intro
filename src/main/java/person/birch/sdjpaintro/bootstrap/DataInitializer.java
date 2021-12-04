@@ -20,8 +20,8 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         bookRepository.deleteAll();
 
-        var bookDDD = new Book("Domain Driven Design", "1234", "RandomHouse");
-        var bookSIP = new Book("Spring in Action", "2345", "Oriely");
+        var bookDDD = new Book("Domain Driven Design", "1234", "RandomHouse", null);
+        var bookSIP = new Book("Spring in Action", "2345", "Oriely", null);
 
         bookRepository.save(bookDDD);
         bookRepository.save(bookSIP);
