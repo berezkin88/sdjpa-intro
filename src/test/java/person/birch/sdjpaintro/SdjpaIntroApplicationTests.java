@@ -20,9 +20,4 @@ class SdjpaIntroApplicationTests {
         assertThat(count)
             .isPositive();
     }
-
-    @Test
-	void contextLoads() {
-	}
-
 }
