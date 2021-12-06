@@ -12,10 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 import person.birch.sdjpaintro.domain.AuthorUuid;
 import person.birch.sdjpaintro.domain.BookNatural;
 import person.birch.sdjpaintro.domain.BookUuid;
-import person.birch.sdjpaintro.repositories.AuthorUuidRepository;
-import person.birch.sdjpaintro.repositories.BookNaturalRepository;
-import person.birch.sdjpaintro.repositories.BookRepository;
-import person.birch.sdjpaintro.repositories.BookUuidRepository;
+import person.birch.sdjpaintro.domain.composite.AuthorComposite;
+import person.birch.sdjpaintro.domain.composite.NameId;
+import person.birch.sdjpaintro.repositories.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.atLeastOnce;
@@ -37,6 +36,8 @@ class MySqlIntegrationTest {
     AuthorUuidRepository authorUuidRepository;
     @Autowired
     BookNaturalRepository bookNaturalRepository;
+    @Autowired
+    AuthorCompositeRepository authorCompositeRepository;
 
     @Test
     void testJpaTestSpliceTransaction() {
@@ -76,5 +77,20 @@ class MySqlIntegrationTest {
         var fetchedBook = bookNaturalRepository.getById(savedBook.getTitle());
         assertThat(fetchedBook)
             .isNotNull();
+    }
+
+    @Test
+    void authorCompositeTest() {
+        var nameId = new NameId("Alex", "B");
+        var authorComposite = new AuthorComposite();
+        authorComposite.setCountry("UA");
+        authorComposite.setFirstName(nameId.getFirstName());
+        authorComposite.setLastName(nameId.getLastName());
+
+        var savedAuthor = authorCompositeRepository.save(authorComposite);
+        assertThat(savedAuthor).isNotNull();
+
+        var fetched = authorCompositeRepository.getById(nameId);
+        assertThat(fetched).isNotNull();
     }
 }
