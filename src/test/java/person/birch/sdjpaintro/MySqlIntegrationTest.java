@@ -13,6 +13,7 @@ import person.birch.sdjpaintro.domain.AuthorUuid;
 import person.birch.sdjpaintro.domain.BookNatural;
 import person.birch.sdjpaintro.domain.BookUuid;
 import person.birch.sdjpaintro.domain.composite.AuthorComposite;
+import person.birch.sdjpaintro.domain.composite.AuthorEmbedded;
 import person.birch.sdjpaintro.domain.composite.NameId;
 import person.birch.sdjpaintro.repositories.*;
 
@@ -38,6 +39,8 @@ class MySqlIntegrationTest {
     BookNaturalRepository bookNaturalRepository;
     @Autowired
     AuthorCompositeRepository authorCompositeRepository;
+    @Autowired
+    AuthorEmbeddedRepository authorEmbeddedRepository;
 
     @Test
     void testJpaTestSpliceTransaction() {
@@ -91,6 +94,18 @@ class MySqlIntegrationTest {
         assertThat(savedAuthor).isNotNull();
 
         var fetched = authorCompositeRepository.getById(nameId);
+        assertThat(fetched).isNotNull();
+    }
+
+    @Test
+    void authorEmbeddedTest() {
+        var nameId = new NameId("Alex", "B");
+        var authorEmbedded = new AuthorEmbedded(nameId);
+
+        var saved = authorEmbeddedRepository.save(authorEmbedded);
+        assertThat(saved).isNotNull();
+
+        var fetched = authorEmbeddedRepository.getById(nameId);
         assertThat(fetched).isNotNull();
     }
 }
