@@ -10,8 +10,10 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 import person.birch.sdjpaintro.domain.AuthorUuid;
+import person.birch.sdjpaintro.domain.BookNatural;
 import person.birch.sdjpaintro.domain.BookUuid;
 import person.birch.sdjpaintro.repositories.AuthorUuidRepository;
+import person.birch.sdjpaintro.repositories.BookNaturalRepository;
 import person.birch.sdjpaintro.repositories.BookRepository;
 import person.birch.sdjpaintro.repositories.BookUuidRepository;
 
@@ -33,6 +35,8 @@ class MySqlIntegrationTest {
     @SpyBean
     @Autowired
     AuthorUuidRepository authorUuidRepository;
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
 
     @Test
     void testJpaTestSpliceTransaction() {
@@ -59,6 +63,18 @@ class MySqlIntegrationTest {
         verify(authorUuidRepository, atLeastOnce()).save(authorToSave);
         assertThat(savedAuthor)
             .extracting(AuthorUuid::getId)
+            .isNotNull();
+    }
+
+    @Test
+    void bookNaturalTest() {
+        var bookNatural = new BookNatural();
+        bookNatural.setTitle("My book");
+
+        var savedBook = bookNaturalRepository.save(bookNatural);
+
+        var fetchedBook = bookNaturalRepository.getById(savedBook.getTitle());
+        assertThat(fetchedBook)
             .isNotNull();
     }
 }
